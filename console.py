@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Console Module """
+"""Defines the HBNB console."""
 import cmd
 from shlex import split
 from models import storage
@@ -18,14 +18,14 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = "(hbnb) "
     __classes = {
-            "BaseModel",
-            "User",
-            "State",
-            "City",
-            "Amenity",
-            "Place",
-            "Review"
-            }
+        "BaseModel",
+        "User",
+        "State",
+        "City",
+        "Amenity",
+        "Place",
+        "Review"
+    }
 
     def emptyline(self):
         """Ignore empty spaces."""
@@ -51,9 +51,7 @@ class HBNBCommand(cmd.Cmd):
 
             kwargs = {}
             for i in range(1, len(my_list)):
-                key, _, value = my_list[i].partition("=")
-                if "=" not in my_list[i]:
-                    raise ValueError("Invalid: {}".format(my_list[i]))
+                key, value = tuple(my_list[i].split("="))
                 if value[0] == '"':
                     value = value.strip('"').replace("_", " ")
                 else:
@@ -93,7 +91,7 @@ class HBNBCommand(cmd.Cmd):
             if len(my_list) < 2:
                 raise IndexError()
             objects = storage.all()
-            key = my_list[0] + "." + my_list[1]
+            key = my_list[0] + '.' + my_list[1]
             if key in objects:
                 print(objects[key])
             else:
@@ -124,7 +122,7 @@ class HBNBCommand(cmd.Cmd):
             if len(my_list) < 2:
                 raise IndexError()
             objects = storage.all()
-            key = my_list[0] + "." + my_list[1]
+            key = my_list[0] + '.' + my_list[1]
             if key in objects:
                 del objects[key]
                 storage.save()
@@ -177,7 +175,7 @@ class HBNBCommand(cmd.Cmd):
             if len(my_list) < 2:
                 raise IndexError()
             objects = storage.all()
-            key = my_list[0] + "." + my_list[1]
+            key = my_list[0] + '.' + my_list[1]
             if key not in objects:
                 raise KeyError()
             if len(my_list) < 3:
@@ -204,7 +202,8 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
 
     def count(self, line):
-        """count the number of instances of a class"""
+        """count the number of instances of a class
+        """
         counter = 0
         try:
             my_list = split(line, " ")
@@ -212,7 +211,7 @@ class HBNBCommand(cmd.Cmd):
                 raise NameError()
             objects = storage.all()
             for key in objects:
-                name = key.split(".")
+                name = key.split('.')
                 if name[0] == my_list[0]:
                     counter += 1
             print(counter)
@@ -229,15 +228,16 @@ class HBNBCommand(cmd.Cmd):
         new_list = []
         new_list.append(args[0])
         try:
-            my_dict = eval(args[1][args[1].find("{"): args[1].find("}") + 1])
+            my_dict = eval(
+                args[1][args[1].find('{'):args[1].find('}')+1])
         except Exception:
             my_dict = None
         if isinstance(my_dict, dict):
-            new_str = args[1][args[1].find("(") + 1: args[1].find(")")]
+            new_str = args[1][args[1].find('(')+1:args[1].find(')')]
             new_list.append(((new_str.split(", "))[0]).strip('"'))
             new_list.append(my_dict)
             return new_list
-        new_str = args[1][args[1].find("(") + 1: args[1].find(")")]
+        new_str = args[1][args[1].find('(')+1:args[1].find(')')]
         new_list.append(" ".join(new_str.split(", ")))
         return " ".join(i for i in new_list)
 
@@ -245,7 +245,7 @@ class HBNBCommand(cmd.Cmd):
         """retrieve all instances of a class and
         retrieve the number of instances
         """
-        my_list = line.split(".")
+        my_list = line.split('.')
         if len(my_list) >= 2:
             if my_list[1] == "all()":
                 self.do_all(my_list[0])
@@ -259,7 +259,7 @@ class HBNBCommand(cmd.Cmd):
                 args = self.strip_clean(my_list)
                 if isinstance(args, list):
                     obj = storage.all()
-                    key = args[0] + " " + args[1]
+                    key = args[0] + ' ' + args[1]
                     for k, v in args[2].items():
                         self.do_update(key + ' "{}" "{}"'.format(k, v))
                 else:
@@ -268,5 +268,5 @@ class HBNBCommand(cmd.Cmd):
             cmd.Cmd.default(self, line)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     HBNBCommand().cmdloop()

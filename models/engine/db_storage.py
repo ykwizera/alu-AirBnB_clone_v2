@@ -14,7 +14,7 @@ from models.amenity import Amenity
 
 
 class DBStorage:
-    """ create tables in environmental"""
+    """ create tables"""
     __engine = None
     __session = None
 
@@ -79,6 +79,6 @@ class DBStorage:
         self.__session = Session()
 
     def close(self):
-        """ calls close() on the class Session
+        """ calls remove()
         """
         self.__session.close()
