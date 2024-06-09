@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Script to set up web servers for the deployment of web_static
 
+set -e
+
 # Function to install nginx if not already installed
 install_nginx() {
     if ! dpkg -l | grep -q nginx; then
@@ -22,7 +24,7 @@ create_html_file() {
   <body>
     Holberton School
   </body>
-</html>" | sudo tee /data/web_static/releases/test/index.html
+</html>" | sudo tee /data/web_static/releases/test/index.html > /dev/null
 }
 
 # Function to create a symbolic link
